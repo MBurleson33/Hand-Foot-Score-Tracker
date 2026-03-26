@@ -1,1 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Hand &amp; Foot">
+<meta name="theme-color" content="#0d1b2a">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>Hand &amp; Foot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+:root {
+  /* Table felt — deep navy base */
+  --navy-900: #060e18;
+  --navy-800: #0d1b2a;
+  --navy-700: #122336;
+  --navy-600: #1a3048;
+  --navy-500: #24415f;
+  --navy-400: #355a7a;
+  --navy-300: #5a7f9e;
+  --navy-200: #8aaec6;
+  --navy-100: #c2d8e8;
+
+  /* Clean books — emerald green (pure, natural) */
+  --clean-600: #059669;
+  --clean-500: #10b981;
+  --clean-400: #34d399;
+  --clean-100: #d1fae5;
+  --clean-bg: rgba(16,185,129,0.12);
+  --clean-border: rgba(16,185,129,0.35);
+
+  /* Dirty books — amber/gold (wild, impure but valuable) */
+  --dirty-600: #d97706;
+  --dirty-500: #f59e0b;
+  --dirty-400: #fbbf24;
+  --dirty-100: #fef3c7;
+  --dirty-bg: rgba(245,158,11,0.12);
+  --dirty-border: rgba(245,158,11,0.35);
+
+  /* Red threes — they're literally red */
+  --red-600: #dc2626;
+  --red-500: #ef4444;
+  --red-400: #f87171;
+  --red-100: #fee2e2;
+  --red-bg: rgba(239,68,68,0.12);
+  --red-border: rgba(239,68,68,0.35);
+
+  /* Card points — warm white/ivory (face-value, neutral) */
+  --card-bg: rgba(194,216,232,0.08);
+  --card-border: rgba(194,216,232,0.2);
+
+  /* Going out / perfect deal — teal (triumph moment) */
+  --teal-500: #14b8a6;
+  --teal-400: #2dd4bf;
+  --teal-bg: rgba(20,184,166,0.12);
+  --teal-border: rgba(20,184,166,0.3);
+
+  /* Negative — cool slate (being set = cold, deflating) */
+  --neg-500: #6366f1;
+  --neg-400: #818cf8;
+  --neg-bg: rgba(99,102,241,0.12);
+  --neg-border: rgba(99,102,241,0.35);
+
+  /* Team colors — vivid, distinct */
+  --team-0: #3b82f6;  /* cobalt */
+  --team-1: #a855f7;  /* violet */
+  --team-2: #f97316;  /* coral */
+  --team-0-bg: rgba(59,130,246,0.15);
+  --team-1-bg: rgba(168,85,247,0.15);
+  --team-2-bg: rgba(249,115,22,0.15);
+
+  --font-display: 'Libre Baskerville', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+html, body {
+  height: 100%;
+  background: var(--navy-800);
+  color: var(--navy-100);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+body {
+  padding-top: var(--safe-top);
+  padding-bottom: var(--safe-bottom);
+  min-height: 100dvh;
+}
+
+/* ── SCREENS ── */
+.screen { display: none; }
+.screen.active { display: flex; flex-direction: column; min-height: 100dvh; }
+
+/* ── SETUP ── */
+#setup-screen {
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1rem 2rem;
+  background: var(--navy-800);
+  position: relative;
+  overflow: hidden;
+}
+
+#setup-screen::before {
+  content: '';
+  position: absolute;
+  top: -120px; left: 50%;
+  transform: translateX(-50%);
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.setup-inner {
+  width: 100%;
+  max-width: 440px;
+  position: relative;
+  z-index: 1;
+}
+
+.logo-area {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.logo-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px; height: 60px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--navy-600), var(--navy-500));
+  border: 1px solid var(--navy-400);
+  margin-bottom: 1rem;
+  font-size: 28px;
+}
+
+.logo-area h1 {
+  font-family: var(--font-display);
+  font-size: 26px;
+  color: var(--navy-100);
+  letter-spacing: -0.01em;
+}
+
+.logo-area p {
+  font-size: 13px;
+  color: var(--navy-300);
+  margin-top: 4px;
+}
+
+.setup-card {
+  background: var(--navy-700);
+  border: 1px solid var(--navy-500);
+  border-radius: 20px;
+  padding: 1.5rem;
+}
+
+.setup-section-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--navy-300);
+  margin-bottom: 0.6rem;
+}
+
+.mode-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.mode-btn {
+  background: var(--navy-800);
+  border: 1px solid var(--navy-500);
+  border-radius: 12px;
+  padding: 12px 10px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--navy-200);
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mode-btn:active { transform: scale(0.97); }
+
+.mode-btn.selected {
+  background: var(--team-0-bg);
+  border-color: var(--team-0);
+  color: #93c5fd;
+}
+
+.team-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.team-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.team-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.team-row input {
+  flex: 1;
+  padding: 11px 14px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  background: var(--navy-800);
+  border: 1px solid var(--navy-500);
+  border-radius: 12px;
+  color: var(--navy-100);
+  outline: none;
+  transition: border-color 0.15s;
+  -webkit-appearance: none;
+}
+
+.team-row input:focus { border-color: var(--team-0); }
+.team-row input::placeholder { color: var(--navy-400); }
+
+.start-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--team-0);
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  letter-spacing: 0.01em;
+}
+
+.start-btn:active { transform: scale(0.98); background: #2563eb; }
+
+/* ── TRACKER ── */
+#tracker-screen {
+  background: var(--navy-900);
+  padding: 0;
+}
+
+.app-header {
+  background: var(--navy-800);
+  border-bottom: 1px solid var(--navy-600);
+  padding: 12px 16px 0;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.app-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--navy-100);
+  letter-spacing: -0.01em;
+}
+
+.new-game-btn {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--navy-300);
+  background: var(--navy-700);
+  border: 1px solid var(--navy-500);
+  border-radius: 8px;
+  padding: 5px 10px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.round-tabs {
+  display: flex;
+  gap: 4px;
+}
+
+.round-tab {
+  flex: 1;
+  padding: 8px 4px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--navy-300);
+  background: transparent;
+  border: none;
+  border-bottom: 2.5px solid transparent;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+}
+
+.round-tab.active {
+  color: var(--navy-100);
+  border-bottom-color: var(--team-0);
+}
+
+.round-req-bar {
+  background: var(--navy-700);
+  border-bottom: 1px solid var(--navy-600);
+  padding: 7px 16px;
+  font-size: 12px;
+  color: var(--navy-300);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.req-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--teal-bg);
+  color: var(--teal-400);
+  border: 1px solid var(--teal-border);
+}
+
+/* ── SCORE AREA ── */
+.score-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.team-columns {
+  display: grid;
+  gap: 10px;
+}
+
+/* Team card */
+.team-card {
+  background: var(--navy-800);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--navy-600);
+}
+
+.team-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--navy-600);
+}
+
+.team-card-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tch-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+}
+
+.tch-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--navy-100);
+}
+
+.tch-round-total {
+  font-size: 22px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--navy-100);
+  font-family: var(--font-display);
+}
+
+/* Score rows */
+.score-row {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  gap: 10px;
+  border-bottom: 1px solid var(--navy-700);
+  transition: background 0.1s;
+}
+
+.score-row:last-of-type { border-bottom: none; }
+
+.row-icon {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.row-clean { background: var(--clean-bg); border: 1px solid var(--clean-border); }
+.row-dirty { background: var(--dirty-bg); border: 1px solid var(--dirty-border); }
+.row-red   { background: var(--red-bg);   border: 1px solid var(--red-border); }
+.row-card  { background: var(--card-bg);  border: 1px solid var(--card-border); }
+.row-neg   { background: var(--neg-bg);   border: 1px solid var(--neg-border); }
+
+.row-label {
+  flex: 1;
+  min-width: 0;
+}
+
+.row-label-text {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--navy-200);
+  display: block;
+}
+
+.row-label-hint {
+  font-size: 11px;
+  color: var(--navy-400);
+}
+
+.row-input {
+  width: 64px;
+  padding: 7px 8px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  background: var(--navy-700);
+  border: 1px solid var(--navy-500);
+  border-radius: 10px;
+  color: var(--navy-100);
+  text-align: center;
+  outline: none;
+  -webkit-appearance: none;
+  transition: border-color 0.15s;
+}
+
+.row-input:focus { border-color: var(--navy-200); }
+
+.row-input.neg-input {
+  border-color: var(--neg-border);
+  color: var(--neg-400);
+  background: var(--neg-bg);
+}
+
+.row-computed {
+  width: 60px;
+  text-align: right;
+  font-size: 14px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--navy-300);
+  min-height: 20px;
+}
+
+.row-computed.c-clean { color: var(--clean-400); }
+.row-computed.c-dirty { color: var(--dirty-400); }
+.row-computed.c-red   { color: var(--red-400); }
+.row-computed.c-card  { color: var(--navy-200); }
+.row-computed.c-neg   { color: var(--neg-400); }
+
+/* Checkbox rows */
+.check-row {
+  display: flex;
+  gap: 0;
+  border-top: 1px solid var(--navy-700);
+}
+
+.check-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.1s;
+  border-right: 1px solid var(--navy-700);
+}
+
+.check-item:last-child { border-right: none; }
+
+.check-item input[type="checkbox"] {
+  width: 18px; height: 18px;
+  cursor: pointer;
+  accent-color: var(--teal-500);
+  flex-shrink: 0;
+}
+
+.check-item label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--navy-300);
+  cursor: pointer;
+  line-height: 1.3;
+}
+
+.check-item.checked {
+  background: var(--teal-bg);
+}
+
+.check-item.checked label { color: var(--teal-400); }
+
+/* Subtotal bar */
+.subtotal-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--navy-700);
+  border-top: 1px solid var(--navy-600);
+}
+
+.sub-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--navy-300);
+}
+
+.sub-val {
+  font-size: 16px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-display);
+  color: var(--navy-100);
+}
+
+/* ── GRAND TOTALS ── */
+.totals-section {
+  background: var(--navy-800);
+  border-top: 1px solid var(--navy-600);
+  padding: 12px;
+  flex-shrink: 0;
+}
+
+.totals-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--navy-400);
+  margin-bottom: 8px;
+}
+
+.totals-grid {
+  display: grid;
+  gap: 6px;
+}
+
+.total-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--navy-700);
+  border: 1px solid var(--navy-600);
+  border-radius: 12px;
+  padding: 10px 14px;
+}
+
+.total-card.is-leader {
+  border-width: 1.5px;
+}
+
+.total-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.total-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+}
+
+.total-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy-200);
+}
+
+.leader-pill {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 6px;
+  letter-spacing: 0.04em;
+}
+
+.total-score {
+  font-size: 22px;
+  font-weight: 700;
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+  color: var(--navy-100);
+}
+
+.info-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 10px 12px 6px;
+  flex-shrink: 0;
+}
+
+.info-chip {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.03em;
+}
+
+.chip-clean { background: var(--clean-bg); color: var(--clean-400); border: 1px solid var(--clean-border); }
+.chip-dirty { background: var(--dirty-bg); color: var(--dirty-400); border: 1px solid var(--dirty-border); }
+.chip-red   { background: var(--red-bg);   color: var(--red-400);   border: 1px solid var(--red-border); }
+.chip-teal  { background: var(--teal-bg);  color: var(--teal-400);  border: 1px solid var(--teal-border); }
+
+/* Input: hide number spinners */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+input[type=number] { -moz-appearance: textfield; }
+
+@media (min-width: 640px) {
+  .team-columns { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .totals-grid  { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+}
+</style>
+</head>
+<body>
+
+<!-- ── SETUP SCREEN ── -->
+<div class="screen active" id="setup-screen">
+  <div class="setup-inner">
+    <div class="logo-area">
+      <div class="logo-icon">🃏</div>
+      <h1>Hand &amp; Foot</h1>
+      <p>Score tracker</p>
+    </div>
+    <div class="setup-card">
+      <div class="setup-section-label" style="margin-bottom:0.5rem">Players / teams</div>
+      <div class="mode-grid" id="mode-grid">
+        <div class="mode-btn selected" onclick="selectMode(2,false,this)">2 Teams</div>
+        <div class="mode-btn" onclick="selectMode(3,false,this)">3 Teams</div>
+        <div class="mode-btn" onclick="selectMode(2,true,this)">2 Players</div>
+        <div class="mode-btn" onclick="selectMode(3,true,this)">3 Players</div>
+      </div>
+      <div class="setup-section-label">Names</div>
+      <div class="team-inputs" id="team-inputs"></div>
+      <button class="start-btn" onclick="startGame()">Deal the cards →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── TRACKER SCREEN ── -->
+<div class="screen" id="tracker-screen">
+  <div class="app-header">
+    <div class="header-top">
+      <div class="app-title">Hand &amp; Foot</div>
+      <button class="new-game-btn" onclick="confirmReset()">New game</button>
+    </div>
+    <div class="round-tabs" id="round-tabs"></div>
+  </div>
+
+  <div class="round-req-bar" id="round-req-bar">
+    <span>Minimum meld to enter play:</span>
+    <span class="req-badge" id="req-badge">50 pts</span>
+  </div>
+
+  <div class="score-area" id="score-area">
+    <div class="team-columns" id="team-columns"></div>
+  </div>
+
+  <div class="info-row">
+    <span class="info-chip chip-clean">Clean = 500</span>
+    <span class="info-chip chip-dirty">Dirty = 300</span>
+    <span class="info-chip chip-red">Red 3 = 100</span>
+    <span class="info-chip chip-teal">Out = 100</span>
+    <span class="info-chip chip-teal">Perfect deal = 100</span>
+  </div>
+
+  <div class="totals-section">
+    <div class="totals-label">Grand total — all rounds</div>
+    <div class="totals-grid" id="totals-grid"></div>
+  </div>
+</div>
+
+<script>
+const TEAM_COLORS = ['#3b82f6','#a855f7','#f97316'];
+const TEAM_COLORS_BG = ['rgba(59,130,246,0.15)','rgba(168,85,247,0.15)','rgba(249,115,22,0.15)'];
+const TEAM_COLORS_LEADER_TEXT = ['#93c5fd','#d8b4fe','#fed7aa'];
+const ROUND_REQS = [50, 90, 120, 150];
+
+let teamCount = 2, isIndividual = false, teamNames = [], currentRound = 0, scores = {};
+
+// ── SETUP ──────────────────────────────────────────
+
+function selectMode(count, ind, el) {
+  teamCount = count; isIndividual = ind;
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  renderTeamInputs();
+}
+
+function renderTeamInputs() {
+  const word = isIndividual ? 'Player' : 'Team';
+  const el = document.getElementById('team-inputs');
+  el.innerHTML = '';
+  for (let i = 0; i < teamCount; i++) {
+    const row = document.createElement('div'); row.className = 'team-row';
+    const dot = document.createElement('div'); dot.className = 'team-dot';
+    dot.style.background = TEAM_COLORS[i];
+    const inp = document.createElement('input');
+    inp.type = 'text'; inp.placeholder = `${word} ${i+1}`;
+    inp.value = `${word} ${i+1}`; inp.id = `tname-${i}`;
+    inp.style.borderColor = 'rgba(90,127,158,0.5)';
+    inp.addEventListener('focus', () => inp.style.borderColor = TEAM_COLORS[i]);
+    inp.addEventListener('blur',  () => inp.style.borderColor = 'rgba(90,127,158,0.5)');
+    row.appendChild(dot); row.appendChild(inp); el.appendChild(row);
+  }
+}
+
+function startGame() {
+  teamNames = [];
+  for (let i = 0; i < teamCount; i++) {
+    const el = document.getElementById(`tname-${i}`);
+    teamNames.push((el ? el.value.trim() : '') || (isIndividual ? `Player ${i+1}` : `Team ${i+1}`));
+  }
+  scores = {};
+  for (let t = 0; t < teamCount; t++) {
+    scores[t] = {};
+    for (let r = 0; r < 4; r++) {
+      scores[t][r] = { clean:0, dirty:0, redThrees:0, cardPts:0, goingOut:false, perfectDeal:false, negPoints:0 };
+    }
+  }
+  currentRound = 0;
+  document.getElementById('setup-screen').classList.remove('active');
+  document.getElementById('tracker-screen').classList.add('active');
+  renderRoundTabs(); renderReqBar(); renderColumns(); renderTotals();
+}
+
+// ── SCORING ─────────────────────────────────────────
+
+function calcRound(t, r) {
+  const s = scores[t][r]; let total = 0;
+  total += (s.clean||0) * 500;
+  total += (s.dirty||0) * 300;
+  total += (s.redThrees||0) * 100;
+  total += (s.cardPts||0);
+  if (s.goingOut)    total += 100;
+  if (s.perfectDeal) total += 100;
+  total -= (s.negPoints||0);
+  return total;
+}
+
+function calcGrand(t) {
+  let sum = 0;
+  for (let r = 0; r < 4; r++) sum += calcRound(t, r);
+  return sum;
+}
+
+// ── RENDER ──────────────────────────────────────────
+
+function renderRoundTabs() {
+  const el = document.getElementById('round-tabs'); el.innerHTML = '';
+  for (let r = 0; r < 4; r++) {
+    const b = document.createElement('button'); b.className = 'round-tab' + (r===currentRound?' active':'');
+    b.textContent = `Round ${r+1}`;
+    b.onclick = (rr => () => switchRound(rr))(r);
+    el.appendChild(b);
+  }
+}
+
+function renderReqBar() {
+  document.getElementById('req-badge').textContent = ROUND_REQS[currentRound] + ' pts';
+}
+
+function switchRound(r) {
+  currentRound = r;
+  renderRoundTabs(); renderReqBar(); renderColumns(); renderTotals();
+}
+
+function renderColumns() {
+  const el = document.getElementById('team-columns');
+  el.innerHTML = '';
+  const r = currentRound;
+  for (let t = 0; t < teamCount; t++) {
+    const s = scores[t][r];
+    const rt = calcRound(t, r);
+    const col = document.createElement('div'); col.className = 'team-card'; col.id = `tc-${t}`;
+
+    col.innerHTML = `
+      <div class="team-card-header" style="border-bottom-color:${TEAM_COLORS[t]}33">
+        <div class="team-card-name">
+          <div class="tch-dot" style="background:${TEAM_COLORS[t]}"></div>
+          <div class="tch-label">${teamNames[t]}</div>
+        </div>
+        <div class="tch-round-total" id="rttotal-${t}">${rt.toLocaleString()}</div>
+      </div>
+
+      <div class="score-row">
+        <div class="row-icon row-clean">🟩</div>
+        <div class="row-label">
+          <span class="row-label-text">Clean books</span>
+          <span class="row-label-hint">natural cards only · ×500 pts</span>
+        </div>
+        <input class="row-input" type="number" min="0" id="f-clean-${t}" value="${s.clean||''}" placeholder="0"
+          oninput="upd(${t},${r},'clean',this.value)">
+        <div class="row-computed c-clean" id="cv-clean-${t}">${s.clean ? (s.clean*500).toLocaleString() : ''}</div>
+      </div>
+
+      <div class="score-row">
+        <div class="row-icon row-dirty">🟨</div>
+        <div class="row-label">
+          <span class="row-label-text">Dirty books</span>
+          <span class="row-label-hint">includes wild cards · ×300 pts</span>
+        </div>
+        <input class="row-input" type="number" min="0" id="f-dirty-${t}" value="${s.dirty||''}" placeholder="0"
+          oninput="upd(${t},${r},'dirty',this.value)">
+        <div class="row-computed c-dirty" id="cv-dirty-${t}">${s.dirty ? (s.dirty*300).toLocaleString() : ''}</div>
+      </div>
+
+      <div class="score-row">
+        <div class="row-icon row-red">🔴</div>
+        <div class="row-label">
+          <span class="row-label-text">Red threes</span>
+          <span class="row-label-hint">×100 pts each</span>
+        </div>
+        <input class="row-input" type="number" min="0" id="f-red-${t}" value="${s.redThrees||''}" placeholder="0"
+          oninput="upd(${t},${r},'redThrees',this.value)">
+        <div class="row-computed c-red" id="cv-red-${t}">${s.redThrees ? (s.redThrees*100).toLocaleString() : ''}</div>
+      </div>
+
+      <div class="score-row">
+        <div class="row-icon row-card">🃏</div>
+        <div class="row-label">
+          <span class="row-label-text">Card / meld points</span>
+          <span class="row-label-hint">face value of played cards</span>
+        </div>
+        <input class="row-input" type="number" min="0" id="f-card-${t}" value="${s.cardPts||''}" placeholder="0"
+          oninput="upd(${t},${r},'cardPts',this.value)">
+        <div class="row-computed c-card" id="cv-card-${t}">${s.cardPts ? s.cardPts.toLocaleString() : ''}</div>
+      </div>
+
+      <div class="score-row">
+        <div class="row-icon row-neg">❄️</div>
+        <div class="row-label">
+          <span class="row-label-text">Neg / set points</span>
+          <span class="row-label-hint">cards in hand · subtracted</span>
+        </div>
+        <input class="row-input neg-input" type="number" min="0" id="f-neg-${t}" value="${s.negPoints||''}" placeholder="0"
+          oninput="upd(${t},${r},'negPoints',this.value)">
+        <div class="row-computed c-neg" id="cv-neg-${t}">${s.negPoints ? '−'+s.negPoints.toLocaleString() : ''}</div>
+      </div>
+
+      <div class="check-row">
+        <div class="check-item ${s.goingOut?'checked':''}" id="ci-go-${t}" onclick="toggleCheck(${t},${r},'goingOut','ci-go-${t}','ck-go-${t}')">
+          <input type="checkbox" id="ck-go-${t}" ${s.goingOut?'checked':''} onclick="event.stopPropagation();toggleCheck(${t},${r},'goingOut','ci-go-${t}','ck-go-${t}')">
+          <label for="ck-go-${t}">Went out<br><strong>+100</strong></label>
+        </div>
+        <div class="check-item ${s.perfectDeal?'checked':''}" id="ci-pd-${t}" onclick="toggleCheck(${t},${r},'perfectDeal','ci-pd-${t}','ck-pd-${t}')">
+          <input type="checkbox" id="ck-pd-${t}" ${s.perfectDeal?'checked':''} onclick="event.stopPropagation();toggleCheck(${t},${r},'perfectDeal','ci-pd-${t}','ck-pd-${t}')">
+          <label for="ck-pd-${t}">Perfect deal<br><strong>+100</strong></label>
+        </div>
+      </div>
+
+      <div class="subtotal-bar" style="border-top-color:${TEAM_COLORS[t]}44">
+        <div class="sub-label">Round ${r+1} total</div>
+        <div class="sub-val" id="sub-${t}">${rt.toLocaleString()}</div>
+      </div>
+    `;
+    el.appendChild(col);
+  }
+}
+
+function upd(t, r, field, val) {
+  scores[t][r][field] = parseInt(val) || 0;
+  refresh(t, r);
+  renderTotals();
+}
+
+function toggleCheck(t, r, field, ciId, ckId) {
+  scores[t][r][field] = !scores[t][r][field];
+  const ci = document.getElementById(ciId);
+  const ck = document.getElementById(ckId);
+  if (ci) ci.classList.toggle('checked', scores[t][r][field]);
+  if (ck) ck.checked = scores[t][r][field];
+  refresh(t, r);
+  renderTotals();
+}
+
+function refresh(t, r) {
+  const s = scores[t][r];
+  const rt = calcRound(t, r);
+  const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+  set(`rttotal-${t}`, rt.toLocaleString());
+  set(`sub-${t}`,     rt.toLocaleString());
+  set(`cv-clean-${t}`, s.clean     ? (s.clean*500).toLocaleString()  : '');
+  set(`cv-dirty-${t}`, s.dirty     ? (s.dirty*300).toLocaleString()  : '');
+  set(`cv-red-${t}`,   s.redThrees ? (s.redThrees*100).toLocaleString() : '');
+  set(`cv-card-${t}`,  s.cardPts   ? s.cardPts.toLocaleString()       : '');
+  set(`cv-neg-${t}`,   s.negPoints ? '−'+s.negPoints.toLocaleString() : '');
+}
+
+function renderTotals() {
+  const el = document.getElementById('totals-grid'); el.innerHTML = '';
+  const grands = teamNames.map((_, t) => calcGrand(t));
+  const maxG = Math.max(...grands);
+  const onlyLeader = grands.filter(g => g === maxG).length === 1;
+
+  for (let t = 0; t < teamCount; t++) {
+    const g = grands[t];
+    const isLeader = onlyLeader && g === maxG && g > 0;
+    const card = document.createElement('div');
+    card.className = 'total-card' + (isLeader ? ' is-leader' : '');
+    if (isLeader) card.style.borderColor = TEAM_COLORS[t];
+
+    card.innerHTML = `
+      <div class="total-left">
+        <div class="total-dot" style="background:${TEAM_COLORS[t]}"></div>
+        <div class="total-name">${teamNames[t]}</div>
+        ${isLeader ? `<span class="leader-pill" style="background:${TEAM_COLORS_BG[t]};color:${TEAM_COLORS_LEADER_TEXT[t]}">Leading</span>` : ''}
+      </div>
+      <div class="total-score" style="${isLeader?'color:'+TEAM_COLORS_LEADER_TEXT[t]:''}">${g.toLocaleString()}</div>
+    `;
+    el.appendChild(card);
+  }
+}
+
+function confirmReset() {
+  if (confirm('Start a new game? All scores will be cleared.')) {
+    document.getElementById('tracker-screen').classList.remove('active');
+    document.getElementById('setup-screen').classList.add('active');
+  }
+}
+
+// ── SERVICE WORKER ──────────────────────────────────
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').catch(() => {});
+}
+
+// Init
+renderTeamInputs();
+</script>
+</body>
+</html>
